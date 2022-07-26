@@ -36,9 +36,9 @@
             </p>
           </div>
 
-          <div class="mt-10 flex">
-            <dl class="w-1/2">
-              <div class="w-3/4 float-right">
+          <div class="mt-10 px-24 grid grid-cols-2">
+            <dl class="w-full">
+              <div>
                 <h1 class="text-xl font-extrabold tracking-tight text-gray-900">
                   🗿 Grafik
                 </h1>
@@ -49,7 +49,7 @@
                 />
               </div>
             </dl>
-            <dl class="w-1/2 space-y-8 pl-8">
+            <dl class="space-y-8 pl-8">
               <h1 class="text-xl font-extrabold tracking-tight text-gray-900">
                 🤔 Ingfo Lain
               </h1>
@@ -72,7 +72,7 @@
                     <h1 class="text-3xl">👑</h1>
                   </div>
                   <p class="ml-16 text-xl leading-6 font-bold text-gray-900">
-                    {{ mostVote }}
+                    {{ loading.mostVote ? '-' : mostVote }}
                   </p>
                   <p class="ml-16 text-xs leading-6 font-medium text-gray-500">
                     Suara Terbanyak
@@ -167,6 +167,15 @@ export default {
   },
   data() {
     return {
+      chartBlueprint: {
+        labels: [],
+        datasets: [
+          {
+            data: [],
+            backgroundColor: ['#6466E9', '#F2AE47'],
+          },
+        ],
+      },
       chartData: {},
       chartOptions: {
         responsive: true,
@@ -179,57 +188,66 @@ export default {
       },
       plugins: {},
       listCandidate: [],
+      loading: {
+        mostVote: false,
+      },
       mostVote: '-',
       mostVoteScore: 0,
       leastVoteScore: 0,
       totalVoteScore: 0,
     }
   },
-  async mounted() {
-    await axios(`${baseURL}/LeaderCandidate`, {
-      crossDomain: true,
-    }).then(({ data }) => {
-      this.listCandidate = data
+  mounted() {
+    this.$nextTick(
+      async function () {
+        this.$set(this.loading, 'mostVote', true)
+        const data = await this.fetchCandidate()
+        this.listCandidate = data
 
-      const tempChartBlueprint = {
-        labels: [],
-        datasets: [
-          {
-            data: [],
-            backgroundColor: ['#6466E9', '#F2AE47'],
-          },
-        ],
-      }
+        // loop based on candidate id
+        for (let i = 0; i < data.length; i++) {
+          await this.fetchDetailCandidate(data, i)
+        }
 
-      this.getAllVoteData(data, tempChartBlueprint)
-    })
+        // change state of chart data to API data
+        this.chartData = this.chartBlueprint
+        this.$set(this.loading, 'mostVote', false)
+      }.bind(this)
+    )
   },
   methods: {
-    // Get all vote data
-    getAllVoteData(listCandidateData, APIchartData) {
-      // loop based on candidate id
-      listCandidateData.forEach((element, index) => {
-        APIchartData.labels.push(element.name)
-
-        // Get from API user vote based on candidate id
-        axios(`${baseURL}/LeaderCandidate/${element.id}/UserVote`, {
+    fetchCandidate() {
+      return new Promise((resolve, reject) => {
+        axios(`${baseURL}/LeaderCandidate`, {
           crossDomain: true,
-        }).then(({ data }) => {
-          // adding data into chartdata blueprint
-          APIchartData.datasets[0].data.push(data.length)
-
-          this.checkMostVote(index, data.length)
-
-          // Sum total vote data
-          this.totalVoteScore = APIchartData.datasets
-            .at(0)
-            .data.reduce((a, b) => a + b, 0)
         })
+          .then(({ data }) => {
+            resolve(data)
+          })
+          .catch((err) => reject(err))
       })
-
-      // change state of chart data to API data
-      this.chartData = APIchartData
     },
+    async fetchDetailCandidate(listCandidateData, i) {
+      this.chartBlueprint.labels.unshift(listCandidateData[i].name)
+
+      // Get from API user vote based on candidate id
+      await axios(
+        `${baseURL}/LeaderCandidate/${listCandidateData[i].id}/UserVote`,
+        {
+          crossDomain: true,
+        }
+      ).then(({ data }) => {
+        // adding data into chartdata blueprint
+        this.chartBlueprint.datasets[0].data.unshift(data.length)
+        this.totalVoteScore += data.length
+
+        this.checkMostVote(i, data.length)
+
+        // Sum total vote data
+        // this.totalVoteScore = total
+      })
+    },
+    // check
     checkMostVote(index, candidateScore) {
       if (this.mostVote === '-') {
         this.mostVote = this.listCandidate.at(index).name
@@ -240,8 +258,8 @@ export default {
 
         this.mostVoteScore = candidateScore
       }
-      
-       if (this.mostVote !== '-' && this.leastVoteScore === 0) {
+
+      if (this.mostVote !== '-' && this.leastVoteScore === 0) {
         this.leastVoteScore = candidateScore
       } else if (candidateScore < this.leastVoteScore) {
         this.leastVoteScore = candidateScore

@@ -138,7 +138,7 @@
                   <img
                     :src="candidate.avatar"
                     alt="Models sitting back to back, wearing Basic Tee in black and bone."
-                    class="object-center object-contain"
+                    class="object-center object-fill"
                   />
                 </div>
                 <a class="mt-3 block font-extrabold text-gray-900">
