@@ -239,7 +239,9 @@ export default {
         this.mostVote = this.listCandidate.at(index).name
 
         this.mostVoteScore = candidateScore
-      } else if (this.mostVote !== '-' && this.leastVoteScore === 0) {
+      }
+      
+       if (this.mostVote !== '-' && this.leastVoteScore === 0) {
         this.leastVoteScore = candidateScore
       } else if (candidateScore < this.leastVoteScore) {
         this.leastVoteScore = candidateScore
