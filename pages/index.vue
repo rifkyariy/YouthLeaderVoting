@@ -141,7 +141,7 @@
                     class="object-center object-contain"
                   />
                 </div>
-                <a href="#" class="mt-3 block font-extrabold text-gray-900">
+                <a class="mt-3 block font-extrabold text-gray-900">
                   <span class="absolute z-10 inset-0" aria-hidden="true"></span>
                   {{ candidate.name }}
                 </a>
