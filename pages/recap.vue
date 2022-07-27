@@ -42,11 +42,7 @@
                 <h1 class="text-xl font-extrabold tracking-tight text-gray-900">
                   🗿 Grafik
                 </h1>
-                <Pie
-                  :chart-options="chartOptions"
-                  :chart-data="chartData"
-                  :plugins="plugins"
-                />
+                <Pie :chart-options="chartOptions" :chart-data="chartData" />
               </div>
             </dl>
             <dl class="space-y-8 pl-8">
@@ -186,7 +182,6 @@ export default {
           },
         },
       },
-      plugins: {},
       listCandidate: [],
       loading: {
         mostVote: false,
@@ -228,7 +223,7 @@ export default {
       })
     },
     async fetchDetailCandidate(listCandidateData, i) {
-      this.chartBlueprint.labels.unshift(listCandidateData[i].name)
+      this.chartBlueprint.labels.push(listCandidateData[i].name)
 
       // Get from API user vote based on candidate id
       await axios(
@@ -238,7 +233,7 @@ export default {
         }
       ).then(({ data }) => {
         // adding data into chartdata blueprint
-        this.chartBlueprint.datasets[0].data.unshift(data.length)
+        this.chartBlueprint.datasets[0].data.push(data.length)
         this.totalVoteScore += data.length
 
         this.checkMostVote(i, data.length)
@@ -251,11 +246,9 @@ export default {
     checkMostVote(index, candidateScore) {
       if (this.mostVote === '-') {
         this.mostVote = this.listCandidate.at(index).name
-
         this.mostVoteScore = candidateScore
       } else if (candidateScore > this.mostVoteScore) {
         this.mostVote = this.listCandidate.at(index).name
-
         this.mostVoteScore = candidateScore
       }
 
