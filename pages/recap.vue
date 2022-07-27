@@ -223,7 +223,7 @@ export default {
       })
     },
     async fetchDetailCandidate(listCandidateData, i) {
-      this.chartBlueprint.labels.push(listCandidateData[i].name)
+      this.chartBlueprint.labels.unshift(listCandidateData[i].name)
 
       // Get from API user vote based on candidate id
       await axios(
@@ -233,7 +233,7 @@ export default {
         }
       ).then(({ data }) => {
         // adding data into chartdata blueprint
-        this.chartBlueprint.datasets[0].data.push(data.length)
+        this.chartBlueprint.datasets[0].data.unshift(data.length)
         this.totalVoteScore += data.length
 
         this.checkMostVote(i, data.length)
@@ -252,7 +252,7 @@ export default {
         this.mostVoteScore = candidateScore
       }
 
-      if (this.mostVote !== '-' && this.leastVoteScore === 0) {
+      if (this.leastVoteScore === 0) {
         this.leastVoteScore = candidateScore
       } else if (candidateScore < this.leastVoteScore) {
         this.leastVoteScore = candidateScore
