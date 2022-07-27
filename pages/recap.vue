@@ -36,7 +36,20 @@
             </p>
           </div>
 
-          <div class="mt-10 px-24 grid grid-cols-2">
+          <div v-if="loading.mostVote" class="flex justify-center pt-2">
+            <div class="text-center">
+              <img
+                src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiBzdHlsZT0ibWFyZ2luOiBhdXRvOyBiYWNrZ3JvdW5kOiByZ2IoMjU1LCAyNTUsIDI1NSkgbm9uZSByZXBlYXQgc2Nyb2xsIDAlIDAlOyBkaXNwbGF5OiBibG9jazsgc2hhcGUtcmVuZGVyaW5nOiBhdXRvOyIgd2lkdGg9IjIwMHB4IiBoZWlnaHQ9IjIwMHB4IiB2aWV3Qm94PSIwIDAgMTAwIDEwMCIgcHJlc2VydmVBc3BlY3RSYXRpbz0ieE1pZFlNaWQiPgo8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSg1MCw1MCkiPgogIDxnIHRyYW5zZm9ybT0ic2NhbGUoMC43KSI+CiAgPGNpcmNsZSBjeD0iMCIgY3k9IjAiIHI9IjUwIiBmaWxsPSIjNDUwOTg4Ij48L2NpcmNsZT4KICA8Y2lyY2xlIGN4PSIwIiBjeT0iLTI4IiByPSIxNSIgZmlsbD0iI2ZmZmZmZiI+CiAgICA8YW5pbWF0ZVRyYW5zZm9ybSBhdHRyaWJ1dGVOYW1lPSJ0cmFuc2Zvcm0iIHR5cGU9InJvdGF0ZSIgZHVyPSIxcyIgcmVwZWF0Q291bnQ9ImluZGVmaW5pdGUiIGtleVRpbWVzPSIwOzEiIHZhbHVlcz0iMCAwIDA7MzYwIDAgMCI+PC9hbmltYXRlVHJhbnNmb3JtPgogIDwvY2lyY2xlPgogIDwvZz4KPC9nPgo8IS0tIFtsZGlvXSBnZW5lcmF0ZWQgYnkgaHR0cHM6Ly9sb2FkaW5nLmlvLyAtLT48L3N2Zz4="
+                alt=""
+                srcset=""
+              />
+              <h2 class="font-semibold tracking-wide text-indigo-800 -mt-2">
+                Sedang Memuat Data
+              </h2>
+            </div>
+          </div>
+
+          <div v-if="!loading.mostVote" class="mt-10 px-24 grid grid-cols-2">
             <dl class="w-full">
               <div>
                 <h1 class="text-xl font-extrabold tracking-tight text-gray-900">
