@@ -31,8 +31,8 @@
               Vote Recap
             </p>
             <p class="mt-4 max-w-2xl text-xl text-gray-500 lg:mx-auto">
-              Lorem ipsum dolor sit amet consect adipisicing elit. Possimus
-              magnam voluptatum cupiditate veritatis in accusamus quisquam.
+              Berikut merupakan hasil rekapitulasi pemungutan suara pemilihan
+              ketua karang taruna tunas harapan 2022
             </p>
           </div>
 
